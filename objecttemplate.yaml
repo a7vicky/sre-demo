@@ -1,0 +1,21 @@
+apiVersion: package-operator.run/v1alpha1
+kind: ObjectTemplate
+metadata:
+  name: pko-demo
+spec:
+  template: |
+    apiVersion: package-operator.run/v1alpha1
+    kind: Package
+    metadata:
+      name: pko-demo
+    spec:
+      image: quay.io/aabhishe/pko-demo:v1
+      config: {{toJson .config}}
+  sources:
+  - apiVersion: v1
+    kind: ConfigMap
+    name: pko-demo
+    items:
+    - key: .data.identity
+      destination: .identity
+

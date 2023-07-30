@@ -1,0 +1,33 @@
+apiVersion: manifests.package-operator.run/v1alpha1
+kind: PackageManifest
+metadata:
+  name: validation-webhook
+spec:
+  scopes:
+    - Namespaced
+  phases:
+    - name: namespace
+      class: hosted-cluster
+    - name: sacreation
+      class: hosted-cluster
+  config:
+    openAPIV3Schema:
+      properties:
+        identity:
+          description: configmap data injetion from hs-mc to hcp
+          type: string
+      required:
+      - identity
+      type: object
+  availabilityProbes:
+    - probes:
+        - condition:
+            type: Available
+            status: "True"
+      selector:
+          kind:
+            group: apps
+            kind: Deployment
+          selector:
+            matchLabels:
+              app: validation-webhook
